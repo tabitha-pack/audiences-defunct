@@ -18,6 +18,18 @@ function main(){
   const percentIncrease = 50; 
   const minClicks = 20; 
   const minConversions = 5;
+  const date = new Date();
+
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+   if (day < 10) {
+    day = '0' + day;
+   }
+  
+    let currentDate = `${year}${month}${day}`;
+    console.log(currentDate); 
+  
    
   var campaignSelector = AdsApp
       .campaigns()
@@ -36,7 +48,7 @@ function main(){
            var audiencesCount = campaignAudiences.totalNumEntities();
       
           if(audiencesCount > 0){
-            var stats = campaign.getStatsFor("ALL_TIME");
+            var stats = campaign.getStatsFor("20211129", currentDate); /*INSERT CUSTOM DATE*/
             var conversions = stats.getConversions();   
             var cost = stats.getCost();
             var cCostConv = cost/conversions; 
@@ -47,7 +59,7 @@ function main(){
                 var biddingField = audience.bidding();
                 var currentBid = biddingField.getBidModifier();
                 console.log('Campaign:' + campaignName + ' Audience: ' + audience.getName() + ' ' + currentBid);          
-                var audienceStats = audience.getStatsFor("ALL_TIME");
+                var audienceStats = audience.getStatsFor("20211129", currentDate); /*INSERT CUSTOM DATE*/
                 var audienceCost = audienceStats.getCost(); 
                 var audienceConversions = audienceStats.getConversions(); 
                 var audienceClicks = audienceStats.getClicks(); 
@@ -55,7 +67,7 @@ function main(){
                    var audienceCostConv = audienceCost/audienceConversions;
                    var difference = audienceCostConv - cCostConv;
                    var increase = (difference/cCostConv) * 100;
-                   /*change to increase >= percentIncrease for live implementation*/
+    
                     if(increase >= percentIncrease){
                      console.log(increase);
                        if(biddingType === 'MAXIMIZE_CONVERSIONS'){
@@ -69,7 +81,7 @@ function main(){
                    }else if (audienceConversions == 0 && audienceClicks > minClicks) {
                      var difference = audienceCost - cCostConv; 
                      var increase = (difference/cCostConv) * 100;
-                     /*change to increase >= percentIncrease for live implementation*/
+                     
                       if(increase >= percentIncrease){
                        console.log(increase);
                          if(biddingType === 'MAXIMIZE_CONVERSIONS'){                                        
@@ -107,7 +119,7 @@ function main(){
                           var biddingField = audience.bidding();
                           var currentBid = biddingField.getBidModifier();
                           console.log('adGroup Name: ' + adGroupName + 'Audience Name: ' + audience.getName() + ' ' + currentBid);                       
-                          var audienceStats = audience.getStatsFor("ALL_TIME");
+                          var audienceStats = audience.getStatsFor("20211129", currentDate);  /*INSERT CUSTOM DATE*/
                           var audienceCost = audienceStats.getCost(); 
                           var audienceConversions = audienceStats.getConversions(); 
                           var audienceClicks = audienceStats.getClicks(); 
@@ -115,7 +127,7 @@ function main(){
                              var audienceCostConv = audienceCost/audienceConversions;
                              var difference = audienceCostConv - cCostConv;
                              var increase = (difference/cCostConv) * 100;
-                             /*change to increase >= percentIncrease for live implementation*/
+                             
                                if(increase >= percentIncrease){
                                 console.log(increase);
                                  if(biddingType === 'MAXIMIZE_CONVERSIONS'){
@@ -129,7 +141,7 @@ function main(){
                             }else if (audienceConversions == 0 && audienceClicks > minClicks) {
                               var difference = audienceCost - cCostConv; 
                               var increase = (difference/cCostConv) * 100;
-                             /*change to increase >= percentIncrease for live implementation*/
+                             
                                if(increase >= percentIncrease){
                                 console.log(increase);
                                 if(biddingType === 'MAXIMIZE_CONVERSIONS'){                                        
@@ -148,5 +160,6 @@ function main(){
            } /adgroup iterator loop/
       }/*if no campaign audiences, go to adgroup audiences loop */
   } /*if active campaign & base campaign loop*/
-  } /*campaign iterator*/     
+  } /*campaign iterator*/  
+    
 } /main loop/
